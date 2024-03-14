@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "katara"
+version = "0.1.0"
+description = ""
+authors = ["d-kold <kulkarnidevendra21@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "katara", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.110.0"}
+asyncio-mqtt = "^0.16.2"
+paho-mqtt = "^2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+isort = "^5.13.2"
+ruff = "^0.3.2"
+pre-commit = "^3.6.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+select = ["E", "F", "B", "W", "C4", "PIE", "RET", "SIM", "RUF", "C90", "UP", "ERA", "ARG"]
+ignore = ["E501"] # line-too-long
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["E", "F", "B", "W", "C4", "PIE", "RET", "SIM", "RUF", "C90", "UP", "ERA", "ARG"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+]
+per-file-ignores = { }
+
+# Same as Black.
+line-length = 88
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.11.
+target-version = "py311"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.params.Depends", "fastapi.Query", "fastapi.params.Query"]
+
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"

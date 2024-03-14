@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Water my plants</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <style>
+        @media (min-width: 640px) {
+            .responsive-width { width: 50%; }
+        }
+        @media (min-width: 768px) {
+            .responsive-width { width: 33.333333%; }
+        }
+        @media (min-width: 1024px) {
+            .responsive-width { width: 25%; }
+        }
+    </style>
+</head>
+<body>
+<!--<div class="max-w-sm mx-auto mt-10">-->
+<!--        <div class="bg-white shadow-lg rounded-lg p-5">-->
+<!--            <h2 class="font-bold text-xl mb-4">HTMX + Tailwind Card</h2>-->
+<!--            <p>This card demonstrates fetching and displaying JSON data using HTMX.</p>-->
+<!--            <button hx-get="/api/v1/health_check/" hx-target="#response" hx-trigger="click" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">-->
+<!--                Fetch JSON-->
+<!--            </button>-->
+<!--            <div id="response" class="mt-4"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<body class="bg-gray-100">
+    <div class="max-w-sm mx-auto mt-10 responsive-width">
+        <div class="bg-white shadow-lg rounded-lg p-5 text-center">
+            <h2 class="font-bold text-xl mb-4">Switch Control</h2>
+            <form method="POST" hx-post="/api/v1/water_solenoid/on" hx-target="#api-response" hx-swap="innerHTML">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                    ON
+                </button>
+            </form>
+            <form method="POST" hx-post="/api/v1/water_solenoid/off" hx-target="#api-response" hx-swap="innerHTML">
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                    OFF
+                </button>
+            </form>
+            <div id="api-response" class="mt-4">
+                <!-- The response from your API will be displayed here -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mosquitto
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8080/api/v1/health_check || exit 1"]
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      timeout: 5s
+    restart: unless-stopped
+    env_file: .env
+    # Removed network_mode: host for compatibility with ports and health checks
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/config/mqtt_passwd:/mosquitto/config/mqtt_passwd
+    # Removed healthcheck for Mosquitto unless you have a specific HTTP check in place
+    restart: unless-stopped
