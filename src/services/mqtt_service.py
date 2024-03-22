@@ -39,7 +39,7 @@ class MqttClient:
         self.mqtt_client.username_pw_set(self.username, self.password)
         self.connect()
 
-        LOGGER.debug(f"MQTT client started with host '{self.host}' and port '{self.port}'")
+        LOGGER.info(f"MQTT client started with host '{self.host}' and port '{self.port}'")
         self.mqtt_client.loop_forever()
 
     def connect(self):
@@ -49,3 +49,16 @@ class MqttClient:
             LOGGER.debug("Could not connect to MQTT broker, retry in 2 seconds: {}".format(e))
             time.sleep(2)
             self.connect()
+
+    def _subscribe_to_topics(self):
+        topic_list = [
+            f'katara/status/#',
+            f'katara/clients/solenoid/#'
+        ]
+
+        for topic in topic_list:
+            self.mqtt_client.subscribe(topic, qos=self.qos)
+            self.subscribed_topics.append(topic)
+            LOGGER.info(f"Subscribed to topic '{topic}'")
+
+    

@@ -17,6 +17,8 @@ services:
       timeout: 5s
     restart: unless-stopped
     env_file: .env
+    volumes:
+      - ./data:/app/data
     # Removed network_mode: host for compatibility with ports and health checks
 
   mosquitto:

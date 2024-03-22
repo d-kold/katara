@@ -27,4 +27,7 @@ RUN poetry install --no-root
 
 COPY . .
 
+RUN chmod 755 /app/data
+RUN chmod 644 /app/data/*
+
 CMD ["poetry", "run", "python", "src/main.py"]

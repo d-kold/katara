@@ -11,6 +11,8 @@ from api.api_v1.api import api_router
 from core.config import settings
 from env_config import EnvConfig
 from services.mqtt_service import MqttClient
+from core import commands
+from core.db import init_db
 
 BASE_PATH = Path(__file__).resolve().parent
 TEMPLATES = Jinja2Templates(directory=str(BASE_PATH / "assets"))
@@ -32,6 +34,13 @@ def root(request: Request) -> _TemplateResponse:
         "index.html",
         {"request": request},
     )
+    # return TEMPLATES.TemplateResponse("base.html",
+    #                                   {
+    #                                       "request": request,
+    #                                       "include_switch_control": True,
+    #                                       "include_current_status": True,
+    #                                       "include_status_list": True,
+    #                                   })
 
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
@@ -39,6 +48,8 @@ app.include_router(root_router)
 
 
 def start():
+    init_db()
+
     config = EnvConfig.load(EnvConfig.CONFIG_KEYS)
 
     mqtt_client = MqttClient(
@@ -49,9 +60,12 @@ def start():
         password=config['MQTT_PASSWORD']
     )
 
+    commands.mqtt_client = mqtt_client
+
     t = threading.Thread(target=mqtt_client.start, name='mqtt client')
     t.daemon = True
     t.start()
+
     uvicorn.run(app, host="0.0.0.0", port=8080, log_level="debug")
 
 
